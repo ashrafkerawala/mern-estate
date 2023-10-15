@@ -4,7 +4,14 @@ import dotenv from 'dotenv'
 
 dotenv.config();
 
-mongoose.connect(process.env.url).then(() => {
+const userName = encodeURIComponent(process.env.username_db);
+const password = encodeURIComponent(process.env.password_db);
+const cluster = process.env.cluster_db;
+const clusterName = process.env.clusterName_db;
+
+const DB_URL = `mongodb+srv://${userName}:${password}@${cluster}/${clusterName}?retryWrites=true&w=majority`
+
+mongoose.connect(DB_URL).then(() => {
     console.log('Connected to database')
 }).catch((err) => {
     console.log(err)
