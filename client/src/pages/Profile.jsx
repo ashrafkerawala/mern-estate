@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
-import { updateUserStart, updateUserSuccess, updateUserFailure, updateUserResetState } from '../redux/user/userSlice'
+import { stateStart, stateSuccess, stateFailure, stateReset } from '../redux/user/userSlice'
 
 function Profile() {
   const { currentUser, loading, error, success } = useSelector((state) => state.user)
@@ -49,7 +49,7 @@ function Profile() {
     e.preventDefault();
     setFileProgress(0)
     try {
-      dispatch(updateUserStart())
+      dispatch(stateStart())
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: 'POST',
         headers: {
@@ -59,20 +59,20 @@ function Profile() {
       })
       const data = await res.json();
       if(data.success === false) {
-        dispatch(updateUserFailure(data.message))
+        dispatch(stateFailure(data.message))
         setTimeout(() => {
-          dispatch(updateUserResetState())
+          dispatch(stateReset())
         }, 2000)
         return;
       }
-      dispatch(updateUserSuccess(data))
+      dispatch(stateSuccess(data))
       setTimeout(() => {
-        dispatch(updateUserResetState())
+        dispatch(stateReset())
       }, 2000)
     } catch (error) {
-      dispatch(updateUserFailure(error.message))
+      dispatch(stateFailure(error.message))
       setTimeout(() => {
-        dispatch(updateUserResetState())
+        dispatch(stateReset())
       }, 2000)
     }
   }

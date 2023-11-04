@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice"
+import { stateStart, stateSuccess, stateFailure, stateReset } from "../redux/user/userSlice"
 import OAuth from "../components/OAuth"
 
 function SignIn() {
@@ -20,7 +20,7 @@ function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(signInStart());
+      dispatch(stateStart());
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: {
@@ -30,13 +30,14 @@ function SignIn() {
       });
       const data = await res.json();
       if(data.success === false) {
-        dispatch(signInFailure(data.message));
+        dispatch(stateFailure(data.message));
         return;
       }
-      dispatch(signInSuccess(data));
+      dispatch(stateSuccess(data));
+      dispatch(stateReset())
       navigate('/')
     } catch (error) {
-      dispatch(signInFailure(error.message));
+      dispatch(stateFailure(error.message));
     }
   }
 
