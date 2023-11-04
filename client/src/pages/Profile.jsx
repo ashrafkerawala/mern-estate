@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux/es/hooks/useSelector'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
 
@@ -11,13 +11,7 @@ function Profile() {
   const [fileUploadErr, setFileUploadErr] = useState(false)
   const [formData, setFormData] = useState({});
 
-  useEffect(() => {
-    if(file) {
-      handleUploadFile(file);
-    }
-  }, [file])
-
-  const handleUploadFile = (file) => {
+  const handleUploadFile = useCallback(() => {
     setFileUploadErr(false)
     const storage = getStorage(app)
     const fileName = new Date().getTime() + file.name;
@@ -33,11 +27,17 @@ function Profile() {
         setFileUploadErr(true);
       }, () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setFormData({...formData, avatar: downloadURL})
+          setFormData(p => ({...p, avatar: downloadURL}))
         });
       }
     )
-  }
+  }, [file])
+  
+  useEffect(() => {
+    if(file) {
+      handleUploadFile(file);
+    }
+  }, [file, handleUploadFile])
 
   return (
     <div className='max-w-lg mx-auto px-3'>
