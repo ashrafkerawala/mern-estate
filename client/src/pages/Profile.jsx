@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
-import { stateStart, stateSuccess, stateFailure, stateReset, stateDelete } from '../redux/user/userSlice'
+import { stateStart, stateSuccess, stateFailure, stateSoftReset, stateHardReset } from '../redux/user/userSlice'
 
 function Profile() {
   const { currentUser, loading, error, success } = useSelector((state) => state.user)
@@ -61,18 +61,18 @@ function Profile() {
       if(data.success === false) {
         dispatch(stateFailure(data.message))
         setTimeout(() => {
-          dispatch(stateReset())
+          dispatch(stateSoftReset())
         }, 2000)
         return;
       }
       dispatch(stateSuccess(data))
       setTimeout(() => {
-        dispatch(stateReset())
+        dispatch(stateSoftReset())
       }, 2000)
     } catch (error) {
       dispatch(stateFailure(error.message))
       setTimeout(() => {
-        dispatch(stateReset())
+        dispatch(stateSoftReset())
       }, 2000)
     }
   }
@@ -88,18 +88,40 @@ function Profile() {
         if(data.success === false) {
           dispatch(stateFailure(data.message))
           setTimeout(() => {
-            dispatch(stateReset())
+            dispatch(stateSoftReset())
           }, 2000)
           return;
         }
-        dispatch(stateDelete(data))
+        dispatch(stateHardReset())
       } catch (error) {
         dispatch(stateFailure(error.message))
         setTimeout(() => {
-          dispatch(stateReset())
+          dispatch(stateSoftReset())
         }, 2000)
       }
       
+    }
+  }
+
+  const handleSignOut = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(stateStart())
+      const res = await fetch(`/api/auth/signout`)
+      const data = await res.json();
+      if(data.success === false) {
+        dispatch(stateFailure(data.message))
+        setTimeout(() => {
+          dispatch(stateSoftReset())
+        }, 2000)
+        return;
+      }
+      dispatch(stateHardReset())
+    } catch (error) {
+      dispatch(stateFailure(error.message))
+      setTimeout(() => {
+        dispatch(stateSoftReset())
+      }, 2000)
     }
   }
 
@@ -164,7 +186,11 @@ function Profile() {
           className='text-red-700 cursor-pointer hover:underline hover:underline-offset-2'>
           Delete account
         </span>
-        <span className='text-red-700 cursor-pointer hover:underline hover:underline-offset-2'>Sign out</span>
+        <span 
+          onClick={handleSignOut}
+          className='text-red-700 cursor-pointer hover:underline hover:underline-offset-2'>
+          Sign out
+        </span>
       </div>
       <p className="text-red-600 mt-2">{ error ? error : '' }</p>
       <p className="text-green-700 mt-2">{ success ? 'Profile Updated Successfully' : '' }</p>

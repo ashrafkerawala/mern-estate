@@ -27,12 +27,12 @@ export const userSlice = createSlice({
             state.loading = false;
             state.success = false
         },
-        stateReset: (state) => {
+        stateSoftReset: (state) => {
             state.error = false;
             state.loading = false;
             state.success = false;
         },
-        stateDelete: (state) => {
+        stateHardReset: (state) => {
             state.error = false;
             state.loading = false;
             state.success = true;
@@ -43,7 +43,7 @@ export const userSlice = createSlice({
 
 export const { 
     stateStart, stateSuccess, 
-    stateFailure, stateReset,
-    stateDelete
+    stateFailure, stateSoftReset,
+    stateHardReset
 } = userSlice.actions
 export default userSlice.reducer;

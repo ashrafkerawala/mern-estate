@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { stateStart, stateSuccess, stateFailure, stateReset } from "../redux/user/userSlice"
+import { stateStart, stateSuccess, stateFailure, stateSoftReset } from "../redux/user/userSlice"
 import OAuth from "../components/OAuth"
 
 function SignIn() {
@@ -34,7 +34,7 @@ function SignIn() {
         return;
       }
       dispatch(stateSuccess(data));
-      dispatch(stateReset())
+      dispatch(stateSoftReset())
       navigate('/')
     } catch (error) {
       dispatch(stateFailure(error.message));
