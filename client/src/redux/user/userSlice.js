@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     currentUser: null,
-    error: null,
+    error: false,
     loading: false,
     success: false
 }
@@ -31,12 +31,19 @@ export const userSlice = createSlice({
             state.error = false;
             state.loading = false;
             state.success = false;
+        },
+        stateDelete: (state) => {
+            state.error = false;
+            state.loading = false;
+            state.success = true;
+            state.currentUser = null;
         }
     }
 })
 
 export const { 
     stateStart, stateSuccess, 
-    stateFailure, stateReset
+    stateFailure, stateReset,
+    stateDelete
 } = userSlice.actions
 export default userSlice.reducer;

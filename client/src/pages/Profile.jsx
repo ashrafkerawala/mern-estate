@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
-import { stateStart, stateSuccess, stateFailure, stateReset } from '../redux/user/userSlice'
+import { stateStart, stateSuccess, stateFailure, stateReset, stateDelete } from '../redux/user/userSlice'
 
 function Profile() {
   const { currentUser, loading, error, success } = useSelector((state) => state.user)
@@ -77,6 +77,32 @@ function Profile() {
     }
   }
 
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    const deleteAccount = prompt('Are you sure you want to delete your Account? (YES/NO)')
+    if(deleteAccount === 'YES') {
+      try {
+        dispatch(stateStart())
+        const res = await fetch(`/api/user/delete/${currentUser._id}`, { method: 'DELETE' })
+        const data = await res.json();
+        if(data.success === false) {
+          dispatch(stateFailure(data.message))
+          setTimeout(() => {
+            dispatch(stateReset())
+          }, 2000)
+          return;
+        }
+        dispatch(stateDelete(data))
+      } catch (error) {
+        dispatch(stateFailure(error.message))
+        setTimeout(() => {
+          dispatch(stateReset())
+        }, 2000)
+      }
+      
+    }
+  }
+
   return (
     <div className='max-w-lg mx-auto px-3'>
       <h1 className='text-3xl font-semibold text-center my-8'>Profile</h1>
@@ -133,7 +159,11 @@ function Profile() {
         </button>
       </form>
       <div className='flex flex-row justify-between mt-4'>
-        <span className='text-red-700 cursor-pointer hover:underline hover:underline-offset-2'>Delete account</span>
+        <span 
+          onClick={handleDelete}
+          className='text-red-700 cursor-pointer hover:underline hover:underline-offset-2'>
+          Delete account
+        </span>
         <span className='text-red-700 cursor-pointer hover:underline hover:underline-offset-2'>Sign out</span>
       </div>
       <p className="text-red-600 mt-2">{ error ? error : '' }</p>
