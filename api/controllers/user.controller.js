@@ -2,19 +2,19 @@ import User from '../models/user.model.js';
 import { errorHandler } from '../utils/error.js';
 import bcryptjs from "bcryptjs"
 
-const base = (req, res) => {
+export const base = (req, res) => {
     res.json({
         message: "Hello World"
     })
 }
 
-const test = (req, res) => {
+export const test = (req, res) => {
     res.json({
         message: "Hello Test"
     })
 };
 
-const updateUser = async (req, res, next) => {
+export const updateUser = async (req, res, next) => {
     if(req.user.id !== req.params.id) return next(errorHandler(401, 'You can only modify your account'));
     try {
         if(req.body.password) {
@@ -37,7 +37,7 @@ const updateUser = async (req, res, next) => {
     }
 }
 
-const deleteUser = async (req, res, next) => {
+export const deleteUser = async (req, res, next) => {
     if(req.user.id !== req.params.id) return next(errorHandler(401, 'You can only delete your account'));
     try {
         await User.findByIdAndDelete(req.params.id)
@@ -47,5 +47,3 @@ const deleteUser = async (req, res, next) => {
         next(error)
     }
 }
-
-export { base, test, updateUser, deleteUser }
