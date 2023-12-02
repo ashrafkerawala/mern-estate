@@ -221,7 +221,7 @@ function CreateListing() {
                                 className='p-1 px-3 rounded-lg w-32 h-12' type="number" name="regularPrice"  id='regularPrice' min='50' max='1000000' required />
                             <div className='flex flex-col items-center'>
                                 <label className='pl-2 flex-1' htmlFor="regularPrice">Regular Price</label>
-                                <span className='text-xs'>($/Month)</span>
+                                <span className='text-xs'>{ formData.type == 'rent' ? '($/Month)' : '(in $)'}</span>
                             </div>
                         </div>
                         {
@@ -235,7 +235,7 @@ function CreateListing() {
                                         min='50' id='discountPrice' required />
                                     <div className='flex flex-col items-center'>
                                         <label className='pl-2 flex-1' htmlFor="discountPrice">Discounted Price</label>
-                                        <span className='text-xs'>($/Month)</span>
+                                        <span className='text-xs'>{ formData.type == 'rent' ? '($/Month)' : '(in $)'}</span>
                                     </div>
                                 </div>
                             )
