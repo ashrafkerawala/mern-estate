@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
 import { stateStart, stateSuccess, stateFailure, stateSoftReset, stateHardReset } from '../redux/user/userSlice'
+import { useNavigate } from 'react-router-dom'
 
 function Profile() {
   const { currentUser, loading, error, success } = useSelector((state) => state.user)
@@ -12,6 +13,7 @@ function Profile() {
   const [fileUploadErr, setFileUploadErr] = useState(false)
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleUploadFile = useCallback(() => {
     setFileUploadErr(false)
@@ -125,6 +127,10 @@ function Profile() {
     }
   }
 
+  const handleCreateListing = () => {
+    navigate('/create-listing')
+  }
+
   return (
     <div className='max-w-lg mx-auto px-3'>
       <h1 className='text-3xl font-semibold text-center my-8'>Profile</h1>
@@ -176,6 +182,8 @@ function Profile() {
           { loading ? 'Loading...': 'Update' }
         </button>
         <button 
+          onClick={handleCreateListing}
+          type='button'
           className='rounded-lg bg-green-700 w-full p-3 text-white hover:opacity-95 disabled:opacity-80'>
           Create Listing
         </button>
