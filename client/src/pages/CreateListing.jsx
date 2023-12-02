@@ -125,7 +125,7 @@ function CreateListing() {
     }
 
     return (
-        <div className="max-w-5xl mx-auto px-3">
+        <div className="max-w-5xl mx-auto px-3 my-8">
             <h1 className='text-3xl font-semibold my-8 text-center'>Create Listing Page</h1>
             <form onSubmit={handleSubmit}
                 className='flex flex-col md:flex-row gap-10'>
