@@ -22,8 +22,6 @@ function CreateListing() {
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    const errorClass = imageUploadError ? '': 'hidden';
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -250,7 +248,7 @@ function CreateListing() {
                             onClick={handleImageSubmit} 
                             type='button' className='p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80' disabled={uploading}>{uploading ? "Uploading...": "Upload"}</button>
                     </div>
-                    <p className={'text-red-700 text-sm ' + errorClass}>{ imageUploadError }</p>
+                    { imageUploadError && <p className='text-red-700 text-sm '>{ imageUploadError }</p> }
                     {
                         formData.imageUrls.length > 0  && 
                         <div className='flex gap-3 sm:flex-wrap items-end'>
