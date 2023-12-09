@@ -149,6 +149,12 @@ function Profile() {
     }
   }
 
+  const updateListings = (id) => {
+    const updatedListings = userListings.filter(listing => listing._id != id)
+    console.log(updatedListings)
+    setUserListings(updatedListings)
+  }
+
   return (
     <div className='max-w-lg mx-auto px-3'>
       <h1 className='text-3xl font-semibold text-center my-8'>Profile</h1>
@@ -231,7 +237,7 @@ function Profile() {
 
       { 
         userListings && userListings.length > 0 ? 
-          <ShowListings listings={userListings} /> : 
+          <ShowListings listings={userListings} updateListings={updateListings} /> : 
           null 
       }
     </div>
