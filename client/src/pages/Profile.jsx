@@ -4,6 +4,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../firebase'
 import { stateStart, stateSuccess, stateFailure, stateSoftReset, stateHardReset } from '../redux/user/userSlice'
 import { useNavigate } from 'react-router-dom'
+import ShowListings from './ShowListing'
 
 function Profile() {
   const { currentUser, loading, error, success } = useSelector((state) => state.user)
@@ -12,6 +13,8 @@ function Profile() {
   const [fileProgress, setFileProgress] = useState(0)
   const [fileUploadErr, setFileUploadErr] = useState(false)
   const [formData, setFormData] = useState({});
+  const [showListingsError, setShowListingsError] = useState(false)
+  const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -131,6 +134,21 @@ function Profile() {
     navigate('/create-listing')
   }
 
+  const handleShowListings = async () => {
+    setShowListingsError(false)
+    try {
+      const res = await fetch(`/api/user/listings/${currentUser._id}`)
+      const data = await res.json();
+      if(data.success === 'false') {
+        setShowListingsError(true)
+        return;
+      }
+      setUserListings(data)
+    } catch (error) {
+      setShowListingsError(true)
+    }
+  }
+
   return (
     <div className='max-w-lg mx-auto px-3'>
       <h1 className='text-3xl font-semibold text-center my-8'>Profile</h1>
@@ -202,6 +220,20 @@ function Profile() {
       </div>
       <p className="text-red-600 mt-2">{ error ? error : '' }</p>
       <p className="text-green-700 mt-2">{ success ? 'Profile Updated Successfully' : '' }</p>
+      <button 
+        disabled={userListings.length > 0}
+        onClick={handleShowListings}
+        type='button' 
+        className='text-green-700 w-full p-3'>
+        Show Listing
+      </button>
+      <p className='text-red-600 mt-4'>{ showListingsError ? 'Error Showing Listings please try again' : ''}</p>
+
+      { 
+        userListings && userListings.length > 0 ? 
+          <ShowListings listings={userListings} /> : 
+          null 
+      }
     </div>
   )
 }
