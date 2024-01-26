@@ -43,11 +43,13 @@ function ShowListings({ listings, updateListings }) {
                                     </Link>
                                 </div>
                                 <div className='flex flex-row sm:flex-col gap-2'>
-                                    <button
-                                        className='text-l uppercase' 
-                                        type='button'>
-                                        Edit
-                                    </button>
+                                    <Link to={`/update-listing/${listing._id}`}>
+                                        <button
+                                            className='text-l uppercase' 
+                                            type='button'>
+                                            Edit
+                                        </button>
+                                    </Link>
                                     <button 
                                         onClick={() => handleDeleteListing(listing._id)}
                                         className='text-l uppercase text-red-700'
