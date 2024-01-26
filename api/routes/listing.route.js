@@ -7,5 +7,6 @@ const router = express.Router();
 router.post('/create', verifyToken, controller.createListing)
 router.delete('/delete/:id', verifyToken, controller.deleteListing)
 router.post('/update/:id', verifyToken, controller.updateListing)
+router.get('/get/:id', controller.getListing)
 
 export default router;
