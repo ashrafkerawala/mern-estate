@@ -5,7 +5,7 @@ import ListingForm from './ListingForm';
 function UpdateListing() {
     const params = useParams()
     const [initialdata, setInitialData] = useState(null)
-    const [isLoading, setIsLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
 
     useEffect(() => {
@@ -13,44 +13,34 @@ function UpdateListing() {
         const signal = controller.signal
         const fetchListing = async () => {
             const listingId = params.listingId
+            setLoading(true)
             try {
                 const res = await fetch(`/api/listing/get/${listingId}`, { signal })
                 const data = await res.json();
                 if(data.success === false) {
-                    setIsLoading(false)
-                    setError(data.message)
-                } else {
-                    setError(false)
-                    setIsLoading(false)
-                    setInitialData(data)
+                    setLoading(false)
+                    setError(true)
+                    return;
                 }
+                setError(false)
+                setLoading(false)
+                setInitialData(data)
             } catch (error) {
-                setIsLoading(false)
-                setError('Error While Fetching Data')
+                setError(true)
             } finally {
-                setIsLoading(false)
+                setLoading(false)
             }
         }
         fetchListing();
-
-        return () =>  {
-            controller.abort()
-        }
     }, [params.listingId])
 
     return (
         <>
-            { 
-                isLoading ? (
-                    'Loading Data...' // Display loading indicator
-                ) : ( 
-                    error ? (
-                        <div>{error}</div>
-                    ) : (
-                        <ListingForm type="update" data={initialdata} />
-                    )
-                )
-            }
+            { loading && <p className='text-2xl text-center my-7 font-semibold'>Loading...</p> }
+            { error && <p className='text-2xl text-center my-7 font-semibold'>Error while loading data</p> }
+            { initialdata && initialdata !== null && !loading && !error && (
+                <ListingForm type="update" data={initialdata} />
+            )}
         </>
     );
 }
