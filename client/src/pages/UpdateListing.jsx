@@ -38,7 +38,7 @@ function UpdateListing() {
         <>
             { loading && <p className='text-2xl text-center my-7 font-semibold'>Loading...</p> }
             { error && <p className='text-2xl text-center my-7 font-semibold'>Error while loading data</p> }
-            { initialdata && initialdata !== null && !loading && !error && (
+            { initialdata && !loading && !error && (
                 <ListingForm type="update" data={initialdata} />
             )}
         </>

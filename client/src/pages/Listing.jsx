@@ -8,16 +8,14 @@ export default function Listing() {
     const params = useParams()
     const [listing, setListing] = useState(null)
     const [error, setError] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchListings = async () => {
             setLoading(true)
             setError(false)
-            const controller = new AbortController()
-            const signal = controller.signal
             try {
-                const res = await fetch(`/api/listing/get/${params.listingId}`, { signal })
+                const res = await fetch(`/api/listing/get/${params.listingId}`)
                 const data = await res.json()
                 if(data.success === false) {
                     setLoading(false)
@@ -40,7 +38,7 @@ export default function Listing() {
         <div>
             { loading && <p className='text-2xl text-center my-7 font-semibold'>Loading...</p> }
             { error && <p className='text-2xl text-center my-7 font-semibold'>Error please try again</p> }
-            { listing && (
+            { listing && !loading && !error && (
                     <Swiper modules={[Navigation]} slidesPerView={1} navigation>
                         {
                             listing.imageUrls.map(url => (

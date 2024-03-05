@@ -35,10 +35,10 @@ function ShowListings({ listings, updateListings }) {
                         <div key={listing.name + index}>
                             <div className='flex flex-col sm:flex-row justify-between sm:items-center gap-4 border border-solid border-slate-300 p-3 rounded-lg'>
                                 <div className='flex flex-row justify-start gap-4 items-center flex-wrap sm:flex-nowrap'>
-                                    <Link to={`listing/${listing._id}`}>
+                                    <Link to={`/listing/${listing._id}`}>
                                         <img className='w-24 h-16 object-cover rounded-lg' src={listing.imageUrls[0]} />
                                     </Link>
-                                    <Link to={`listing/${listing._id}`}>
+                                    <Link to={`/listing/${listing._id}`}>
                                         <p className='text-slate-700 font-semibold text-l hover:underline'>{listing.name}</p>
                                     </Link>
                                 </div>
