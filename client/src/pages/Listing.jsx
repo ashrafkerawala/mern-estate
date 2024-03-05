@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import SwiperCore from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules'
-import 'swiper/css';
+import 'swiper/css/bundle';
 
 export default function Listing() {
     const params = useParams()
     const [listing, setListing] = useState(null)
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(true)
+    SwiperCore.use([Navigation])
 
     useEffect(() => {
         const fetchListings = async () => {
@@ -39,7 +41,7 @@ export default function Listing() {
             { loading && <p className='text-2xl text-center my-7 font-semibold'>Loading...</p> }
             { error && <p className='text-2xl text-center my-7 font-semibold'>Error please try again</p> }
             { listing && !loading && !error && (
-                    <Swiper modules={[Navigation]} slidesPerView={1} navigation>
+                    <Swiper slidesPerView={1} navigation>
                         {
                             listing.imageUrls.map(url => (
                                 <SwiperSlide  key={url}>
