@@ -80,7 +80,7 @@ export default function Listing() {
                                 <p className='text-sm sm:text-lg'>{ listing.address }</p>
                             </div>
                             <div className='flex items-center gap-4 text-lg text-white font-semibold capitalize'>
-                                <div className='px-6 py-1 bg-red-700 rounded-md'>For { listing.type }</div>
+                                <div className='px-6 py-1 bg-red-700 rounded-md'>For { listing.type === 'rent' ? 'Rent': 'Sale' }</div>
                                 <div className={`px-6 py-1 bg-green-700 rounded-md 
                                     ${listing.discountPrice > 0 ? '': 'hidden'}
                                 `}>
