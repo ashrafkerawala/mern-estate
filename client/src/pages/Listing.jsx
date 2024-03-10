@@ -3,15 +3,18 @@ import { useParams } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules';
 import { FaBath, FaBed, FaChair, FaMapMarkerAlt, FaParking } from 'react-icons/fa'
-
+import { useSelector } from 'react-redux'
 import 'swiper/css';
 import 'swiper/css/navigation';
+import Contact from '../components/Contact';
 
 export default function Listing() {
     const params = useParams()
     const [listing, setListing] = useState(null)
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(true)
+    const { currentUser } = useSelector((state) => state.user)
+    const [contact, setContact] = useState(false)
 
     useEffect(() => {
         const fetchListings = async () => {
@@ -43,7 +46,7 @@ export default function Listing() {
             { error && <p className='text-2xl text-center my-7 font-semibold'>Error please try again</p> }
             { listing && !loading && !error && (
                     <>
-                        <Swiper slidesPerView={1}  modules={[Navigation]} navigation>
+                        <Swiper slidesPerView={1}  modules={[Navigation]} navigation={false}>
                             {
                                 listing.imageUrls.map(url => (
                                     <SwiperSlide  key={url}>
@@ -112,6 +115,14 @@ export default function Listing() {
                                     </li>
                                 </ul>
                             </div>
+                            {
+                                currentUser && currentUser._id !== listing.userRef && !contact && (
+                                    <button 
+                                        onClick={() => setContact(true)}
+                                        className='text-white p-3 bg-slate-700 hover:opacity-95 uppercase rounded-lg'>Contact Landlord</button>
+                                )
+                            }
+                            { contact && <Contact listing={listing} /> }
                         </div>
                     </>
                 )
