@@ -9,5 +9,6 @@ router.get('/test', controller.test)
 router.post('/update/:id', verifyToken, controller.updateUser)
 router.delete('/delete/:id', verifyToken, controller.deleteUser)
 router.get('/listings/:id', verifyToken, controller.getUserListings)
+router.get('/:id', verifyToken, controller.getUser)
 
 export default router
