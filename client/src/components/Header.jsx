@@ -1,9 +1,32 @@
 import { FaSearch } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import {  useEffect, useState } from 'react';
 
 function Header() {
     const { currentUser } = useSelector((state) => state.user);
+    const [searchTerm, setSearchTerm] = useState('')
+    const [localSearch] = useState(location.search);
+    const navigate = useNavigate()
+    
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const urlParams = new URLSearchParams(localSearch)
+        urlParams.set('searchTerm', searchTerm)
+
+        if(searchTerm === '') return;
+
+        const searchQuery = urlParams.toString()
+        navigate(`/search?${searchQuery}`)
+    }
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(localSearch)
+        const searTermFromUrl = urlParams.get('searchTerm')
+        if(searTermFromUrl) setSearchTerm(searTermFromUrl)
+
+    }, [localSearch])
+
     return (
         <header className="bg-slate-200 shadow-md">
             <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -13,11 +36,15 @@ function Header() {
                         <span className="text-slate-700">Estate</span>
                     </h1>
                 </Link>
-                <form
+                <form onSubmit={handleSubmit}
                     className="bg-slate-100 p-2 px-3 rounded-lg flex items-center justify-between gap-2 w-24 sm:w-64">
                     <input type="text" placeholder="Search..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         className="bg-transparent focus:outline-none w-full" />
-                    <FaSearch className="text-slate-600 cursor-pointer hidden sm:block" />
+                    <button type='submit'>
+                        <FaSearch className="text-slate-600 cursor-pointer hidden sm:block" />
+                    </button>
                 </form>
                 <ul className="flex gap-4 items-center">
                     <Link to="/">
