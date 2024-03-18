@@ -90,7 +90,7 @@ export const getListings = async (req, res, next) => {
         }
 
         let type = req.query.type
-        if(type === undefined || type === 'false') {
+        if(type === undefined || type === 'all') {
             type = { $in: ['sell', 'rent'] }
         }
 
@@ -107,7 +107,7 @@ export const getListings = async (req, res, next) => {
         }).sort({
             [sort]: order
         }).limit(limit).skip(startIndex)
-
+        
         if(!listings) return next(errorHandler(404, 'No Listings Found!'))
 
         return res.status(200).json(listings)
