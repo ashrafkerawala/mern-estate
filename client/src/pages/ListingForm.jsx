@@ -277,7 +277,7 @@ function ListingForm(props) {
                     <button 
                         disabled={loading || uploading}
                         className='p-3 bg-slate-700 hover:opacity-90 disabled:opacity-80 rounded-lg text-slate-50 w-full uppercase'>
-                        { loading ? props.type + 'ing' + '...' : props.type + ' Listing' }
+                        { loading ? (props.type === 'update' ? 'Updating...' : 'Creating...'): props.type + ' Listing' }
                     </button>
                     {error && <p className='text-red-700 text-sm'>{error}</p>}
                 </div>

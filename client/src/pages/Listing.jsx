@@ -68,11 +68,11 @@ export default function Listing() {
                                 </p>
                                 <div className='flex items-baseline gap-2'>
                                     <p className={`text-3xl font-bold`}>
-                                        ${ listing.discountPrice > 0 ? 
-                                            listing.discountPrice : listing.regularPrice }
+                                        ${ listing.offer ? 
+                                            listing.discountPrice.toLocaleString('en-US') : listing.regularPrice.toLocaleString('en-US') }
                                     </p>
-                                    <p className={`text-m font-semibold uppercase ${listing.type === 'sell' ? 'text-red-700': ''}`}>
-                                        { listing.type === 'rent' ? 'per month': '' }
+                                    <p className={`text-m font-semibold ${listing.type === 'sell' ? 'text-red-700': ''}`}>
+                                        { listing.type === 'rent' ? '/ month': '' }
                                     </p>
                                 </div>
                             </div>
