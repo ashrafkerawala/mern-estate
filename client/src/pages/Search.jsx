@@ -17,6 +17,7 @@ export const Search = () => {
     })
     const [loading, setLoading] = useState(false)
     const [listings, setListings] = useState([])
+    const [showMore, setShowMore] = useState(false)
 
     useEffect(() => {
         const urlParams = new URLSearchParams(urlLocation.search)
@@ -40,9 +41,13 @@ export const Search = () => {
 
         const fetchListings = async () => {
             setLoading(true)
+            setShowMore(false)
             const searchQuery = urlParams.toString();
             const res = await fetch(`/api/listing/get?${searchQuery}`)
             const data = await res.json()
+            if(data.length > 8) {
+                setShowMore(true)
+            }
             setListings(data)
             setLoading(false)
         }
@@ -86,6 +91,20 @@ export const Search = () => {
         }
         const searchQuery = urlParams.toString()
         navigate(`/search?${searchQuery}`)
+    }
+
+    const onShowMoreClick = async () => {
+        const numberOfListings = listings.length
+        const startIndex = numberOfListings
+        const urlParams = new URLSearchParams(urlLocation.search)
+        urlParams.set('startIndex', startIndex)
+        const searchQuery = urlParams.toString()
+        const res = await fetch(`/api/listing/get?${searchQuery}`)
+        const data = await res.json()
+        if(data.length < 9) {
+            setShowMore(false)
+        }
+        setListings([...listings, ...data])
     }
 
     return (
@@ -153,14 +172,21 @@ export const Search = () => {
             </div>
             <div className='p-6 flex-1'>
                 <h1 className='text-slate-700 font-semibold text-2xl md:text-3xl'>Listing Results:</h1>
-                <div className="p-7 flex flex-wrap gap-4">
+                <div className="py-7 flex flex-wrap gap-4">
                     {!loading && listings.length === 0 && (
                         <p className='text-xl text-slate-700'>No Listing found</p>
                     )}
                     {loading && (
-                        <p className='text-xl text-slate-700 text-center'>Loading...</p>
+                        <p className='text-xl text-slate-700 text-center w-full'>Loading...</p>
                     )}
                     {!loading && listings && listings.map((listing) => <ListingItem key={listing._id} listing={listing} /> )}
+                    {showMore && (
+                        <button 
+                            onClick={onShowMoreClick}
+                            className='text-green-700 hover:underline p-7 text-center w-full'>
+                            Show More
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
