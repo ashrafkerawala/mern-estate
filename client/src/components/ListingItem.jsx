@@ -6,7 +6,7 @@ function ListingItem({ listing }) {
   return (
     <div 
       className='bg-white shadow-md hover:shadow-lg transition-shadow 
-        duration-300 overflow-hidden rounded-lg w-full sm:w-[300px]'>
+        duration-300 overflow-hidden rounded-lg w-full sm:w-[300px] 2xl:w-[270px]'>
       <Link to={`/listing/${listing._id}`}>
         <img 
           src={listing.imageUrls[0]} 
