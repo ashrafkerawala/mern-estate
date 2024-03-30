@@ -32,12 +32,7 @@ export const userSlice = createSlice({
             state.loading = false;
             state.success = false;
         },
-        stateHardReset: (state) => {
-            state.error = false;
-            state.loading = false;
-            state.success = true;
-            state.currentUser = null;
-        }
+        stateHardReset: () => initialState
     }
 })
 
